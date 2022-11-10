@@ -1,32 +1,35 @@
 package es.sanitas.test.service;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-
 @Component
 @Service
-public class Calculator {
+public class CalculatorService {
 
-	public Double operate(Double a, Double b, MathOperation mathOperation) {
-		return mathOperation.operation(a, b);
+	public BigDecimal operate(Double a, Double b, MathOperation mathOperation) {
+		return new BigDecimal(mathOperation.operation(a, b));
 	}
 
-	public Double calculate(Double a, Double b, String operation) {
+	public BigDecimal calculate(Double a, Double b, String operation) throws Exception {
 		MathOperation mathOperation = null;
 		switch (operation) {
-		case "+":
+		case "SUM":
 			mathOperation = (number1, number2) -> number1 + number2;
 			break;
-		case "-":
+		case "SUB":
 			mathOperation = (number1, number2) -> number1 - number2;
 			break;
-		case "*":
+		case "MUL":
 			mathOperation = (number1, number2) -> number1 * number2;
 			break;
-		case "/":
+		case "DIV":
 			mathOperation = (number1, number2) -> number1 / number2;
 			break;
+		default:
+			throw new Exception("Invalid operator");
 		}
 
 		return operate(a, b, mathOperation);

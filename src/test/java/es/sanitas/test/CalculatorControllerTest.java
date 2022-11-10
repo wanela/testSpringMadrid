@@ -1,81 +1,62 @@
 package es.sanitas.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import es.sanitas.app.TestApplication;
 import es.sanitas.test.controller.CalculatorController;
 import io.corp.calculator.TracerAPI;
 
-@WebMvcTest(CalculatorController.class)
-@ContextConfiguration(classes = TestApplication.class)
+
+
+@ExtendWith(MockitoExtension.class)
 public class CalculatorControllerTest {
 
-	@Autowired
-	private MockMvc mockMvc;
+	private final String URL = "/calculator";
 
+	private MockMvc mockMvc;
+	
 	@Autowired
 	private TracerAPI trace;
 
-	@Autowired
+	@InjectMocks
 	CalculatorController calculatorController;
 
-	private final String URL = "/calculator";
+	
+	
 
 	@Test
 	public void contextLoads() throws Exception {
 		assertThat(calculatorController).isNotNull();
 	}
+	
+    @BeforeEach
+    void init() {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(calculatorController).build();
+    }
 
-	@Test
-	public void testCalculaterRest() throws Exception {
-		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(URL).queryParam("operator", "-")
-				.queryParam("val1", "10").queryParam("val2", "20")).andReturn();
-
+    @Test
+	public void testUrl() throws Exception {
+    	MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(URL)).andReturn();
 		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.OK.value(), status, "Incorrect Response Status");
+		assertThat(status, not(HttpStatus.NOT_FOUND.value()));
+		
 		trace.trace("TestCase Result: " + result.getResponse().getContentAsString());
 
-	}
-
-	@Test
-	public void testCalculaterSum() throws Exception {
-		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(URL).queryParam("operator", "+")
-				.queryParam("val1", "10").queryParam("val2", "20")).andReturn();
-
-		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.OK.value(), status, "Incorrect Response Status");
-
-		trace.trace("TestCase Result: " + result.getResponse().getContentAsString());
-	}
-
-	@Test
-	public void testCalculaterMult() throws Exception {
-		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(URL).queryParam("operator", "*")
-				.queryParam("val1", "10").queryParam("val2", "21")).andReturn();
-
-		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.OK.value(), status, "Incorrect Response Status");
-		trace.trace("TestCase Result: " + result.getResponse().getContentAsString());
-	}
-
-	@Test
-	public void testCalculaterDiv() throws Exception {
-		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(URL).queryParam("operator", "/")
-				.queryParam("val1", "10").queryParam("val2", "20")).andReturn();
-
-		int status = result.getResponse().getStatus();
-		assertEquals(HttpStatus.OK.value(), status, "Incorrect Response Status");
-
-		trace.trace("TestCase Result: " + result.getResponse().getContentAsString());
-	}
+    }
+ 
 }

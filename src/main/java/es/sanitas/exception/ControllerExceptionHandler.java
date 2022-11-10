@@ -12,21 +12,26 @@ import org.springframework.web.context.request.WebRequest;
 import io.corp.calculator.TracerAPI;
 
 @ControllerAdvice
+public class ControllerExceptionHandler {
 
-public class ControllerExceptionHandler{
-
-	
 	@Autowired
 	private TracerAPI trace;
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorMessage> globalExceptionHandler(Exception ex, WebRequest request) {
-		
-		ErrorMessage message = new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR.value(), new Date(), ex.getMessage(),
-				request.getDescription(false));
-		trace.trace(ex.getMessage());
-		
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-		return new ResponseEntity<ErrorMessage>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+		switch (ex.getMessage()) {
+		case "Invalid operator":
+			status = HttpStatus.BAD_REQUEST;
+			break;
+		}
+
+		ErrorMessage message = new ErrorMessage(status.value(), new Date(), ex.getMessage(),
+				request.getDescription(false));
+
+		trace.trace(ex.getMessage());
+
+		return new ResponseEntity<ErrorMessage>(message, status);
 	}
 }

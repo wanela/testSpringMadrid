@@ -20,13 +20,18 @@
 	-	MathOperation interfaz para poder realizar cálculos usando Lambda 
 	-	ErrorMessage clase para formatear los errores devueltos por ExceptionHandler
 	-	Junit 5 incluido en el core de Spring Boot
-	-	Java 12
+	-	Java 11
+	-   Swagger 
+		Para visualizarlo: 
+		i. 	Usando Spring Boot Dashboard en eclipse -> http://localhost:8080/swagger-ui/
+		ii. Desplegado en un Servidor Tomcat o Jboss -> {{Servidor}}:{{puerto}}/{{Contexto}}/swagger-ui/
 	
 3.	Funcionalidades
 	-	Se ha creado un Web Servicios GET, para realizar pequeños cálculos matemáticos. Pudiéndose, sumar, restar, multiplicar y dividir, dependiendo de los parámetros facilitados vía url.
 	
 4.	Para incluir nuevas operaciones
-	-	Solo se tiene que modificar el servicio.
+	-	Solo se tiene que modificar el servicio, y añadir el case que se necesita, y definir la expresion lambda que la calcule.
+	
 	
 5.	Para compilarlo usando Maven.
 	-	Con la versión usada de Spring Boot no se ha podido autolanzar las pruebas unitarias al iniciar la aplicación. Por lo que previo a la construcción, se debe lanzar “mvn test”
@@ -35,15 +40,15 @@
 	
 6.	Ejemplos de llmadas de la API
 	-	Suma
-		i.	{{Servidor}}:{{puerto}}/{{Contexto}}/calculator/?operator=%2B&val2=2&val1=1
-		ii.	En local usando Spring Boot Dashboard (Levanta un tomcat Local) - localhost:8080/calculator/?operator=%2B&val2=2&val1=1
+		i.	{{Servidor}}:{{puerto}}/{{Contexto}}/calculator/?operator=SUM&val2=2&val1=1
+		ii.	En local usando Spring Boot Dashboard (Levanta un tomcat Local) - localhost:8080/calculator/?operator=SUM&val2=2&val1=1
 	-	Resta
-		i.	{{Servidor}}:{{puerto}}/{{Contexto}}/calculator/?operator=%2D&val2=2&val1=1
-		ii.	En local usando Spring Boot Dashboard (Levanta un tomcat Local) - localhost:8080/calculator/?operator=%2D&val2=2&val1=1
+		i.	{{Servidor}}:{{puerto}}/{{Contexto}}/calculator/?operator=SUB&val2=2&val1=1
+		ii.	En local usando Spring Boot Dashboard (Levanta un tomcat Local) - localhost:8080/calculator/?operator=SUB&val2=2&val1=1
 	-	Multiplicacion
-		i.	{{Servidor}}:{{puerto}}/{{Contexto}}/calculator/?operator=%2A&val2=2&val1=1
-		ii.	En local usando Spring Boot Dashboard (Levanta un tomcat Local) - localhost:8080/calculator/?operator=%2A&val2=2&val1=1
+		i.	{{Servidor}}:{{puerto}}/{{Contexto}}/calculator/?operator=MUL&val2=2&val1=1
+		ii.	En local usando Spring Boot Dashboard (Levanta un tomcat Local) - localhost:8080/calculator/?operator=MUL&val2=2&val1=1
 	-	Division
-		i.	{{Servidor}}:{{puerto}}/{{Contexto}}/calculator/?operator=%2F&val2=2&val1=1
-		ii.	En local usando Spring Boot Dashboard (Levanta un tomcat Local) - localhost:8080/calculator/?operator=%2F&val2=2&val1=1
+		i.	{{Servidor}}:{{puerto}}/{{Contexto}}/calculator/?operator=DIV&val2=2&val1=1
+		ii.	En local usando Spring Boot Dashboard (Levanta un tomcat Local) - localhost:8080/calculator/?operator=DIV&val2=2&val1=1
 
